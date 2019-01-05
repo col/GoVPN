@@ -13,6 +13,7 @@
 		EF2DCD7121E07A8600502848 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF2DCD6F21E07A8600502848 /* Main.storyboard */; };
 		EF2DCD7D21E07A8600502848 /* GoVPNTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2DCD7C21E07A8600502848 /* GoVPNTests.swift */; };
 		EF2DCD8821E07A8600502848 /* GoVPNUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2DCD8721E07A8600502848 /* GoVPNUITests.swift */; };
+		EF2DCD9721E0BCD100502848 /* VPNConfigParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2DCD9621E0BCD100502848 /* VPNConfigParser.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		EF2DCD8321E07A8600502848 /* GoVPNUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GoVPNUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF2DCD8721E07A8600502848 /* GoVPNUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoVPNUITests.swift; sourceTree = "<group>"; };
 		EF2DCD8921E07A8600502848 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		EF2DCD9621E0BCD100502848 /* VPNConfigParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPNConfigParser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,7 +98,9 @@
 		EF2DCD6821E07A8500502848 /* GoVPN */ = {
 			isa = PBXGroup;
 			children = (
+				EF2DCD9521E0BC9300502848 /* Models */,
 				EF2DCD6921E07A8500502848 /* AppDelegate.swift */,
+				EF2DCD9621E0BCD100502848 /* VPNConfigParser.swift */,
 				EF2DCD6B21E07A8500502848 /* ViewController.swift */,
 				EF2DCD6D21E07A8600502848 /* Assets.xcassets */,
 				EF2DCD6F21E07A8600502848 /* Main.storyboard */,
@@ -122,6 +126,13 @@
 				EF2DCD8921E07A8600502848 /* Info.plist */,
 			);
 			path = GoVPNUITests;
+			sourceTree = "<group>";
+		};
+		EF2DCD9521E0BC9300502848 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,6 +203,11 @@
 				TargetAttributes = {
 					EF2DCD6521E07A8500502848 = {
 						CreatedOnToolsVersion = 10.1;
+						SystemCapabilities = {
+							com.apple.Sandbox = {
+								enabled = 0;
+							};
+						};
 					};
 					EF2DCD7721E07A8600502848 = {
 						CreatedOnToolsVersion = 10.1;
@@ -254,6 +270,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF2DCD9721E0BCD100502848 /* VPNConfigParser.swift in Sources */,
 				EF2DCD6C21E07A8500502848 /* ViewController.swift in Sources */,
 				EF2DCD6A21E07A8500502848 /* AppDelegate.swift in Sources */,
 			);
@@ -421,7 +438,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = GoVPN/GoVPN.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 9269KSNZG8;
@@ -440,7 +456,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = GoVPN/GoVPN.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 9269KSNZG8;
