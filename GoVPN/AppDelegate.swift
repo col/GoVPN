@@ -28,9 +28,21 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc func selectVPN(_ sender: Any?) {
         if let menuItem = sender as? NSMenuItem {
-            let vpnNum = Int(menuItem.keyEquivalent)!
-            let payload = config.payloadContent[vpnNum-1]
+            let payload = config.payloadContent[Int(menuItem.keyEquivalent)!-1]
             print("Selected \(payload.userDefinedName)")
+            
+            let otp = Shell.execute(launchPath: "/usr/local/bin/mimier", arguments: ["get", "gojek"])
+            let script = ScriptGenerator.generateScript(name: "ConnectVPN", variables: ["$vpn_otp": otp, "$osx_vpn_name": "\(payload.userDefinedName), Not Connected"])
+            
+            if let script = NSAppleScript(source: script) {
+                var error: NSDictionary?
+                let output: NSAppleEventDescriptor = script.executeAndReturnError(&error)
+                if let error = error {
+                    print("error: \(error)")
+                } else {
+                    print(output.stringValue ?? "unknown")
+                }
+            }
         }
     }
     
@@ -57,11 +69,14 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             menu.addItem(NSMenuItem(title: "Invalid config", action: nil, keyEquivalent: ""))
         }
         
+//        menu.addItem(NSMenuItem.separator())
+//        menu.addItem(NSMenuItem(title: "Preferences...", action: #selector(NSApplication.terminate(_:)), keyEquivalent: ","))
+        
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit GoVPN", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         
         statusItem.menu = menu
     }
-    
+ 
 }
 
