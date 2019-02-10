@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EF19EC8721E3171C00D0CD40 /* VPN.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF19EC8621E3171C00D0CD40 /* VPN.swift */; };
 		EF2DCD6A21E07A8500502848 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2DCD6921E07A8500502848 /* AppDelegate.swift */; };
-		EF2DCD6C21E07A8500502848 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2DCD6B21E07A8500502848 /* ViewController.swift */; };
 		EF2DCD6E21E07A8600502848 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EF2DCD6D21E07A8600502848 /* Assets.xcassets */; };
 		EF2DCD7121E07A8600502848 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF2DCD6F21E07A8600502848 /* Main.storyboard */; };
 		EF2DCD7D21E07A8600502848 /* GoVPNTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2DCD7C21E07A8600502848 /* GoVPNTests.swift */; };
@@ -17,6 +17,9 @@
 		EF2DCD9A21E0DB1F00502848 /* ConnectVPN.scpt in Resources */ = {isa = PBXBuildFile; fileRef = EF2DCD9821E0DA9000502848 /* ConnectVPN.scpt */; };
 		EF2DCD9F21E0F06E00502848 /* ScriptGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2DCD9E21E0F06E00502848 /* ScriptGenerator.swift */; };
 		EF2DCDA121E0F5B200502848 /* Shell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2DCDA021E0F5B200502848 /* Shell.swift */; };
+		EF2DCDA321E104FD00502848 /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EF2DCDA221E104FD00502848 /* Preferences.storyboard */; };
+		EF2DCDA521E1057E00502848 /* PreferencesWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2DCDA421E1057E00502848 /* PreferencesWindow.swift */; };
+		EF2DCDA721E1059B00502848 /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2DCDA621E1059B00502848 /* PreferencesViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,9 +40,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EF19EC8621E3171C00D0CD40 /* VPN.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VPN.swift; sourceTree = "<group>"; };
 		EF2DCD6621E07A8500502848 /* GoVPN.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoVPN.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EF2DCD6921E07A8500502848 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		EF2DCD6B21E07A8500502848 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		EF2DCD6D21E07A8600502848 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		EF2DCD7021E07A8600502848 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		EF2DCD7221E07A8600502848 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -54,6 +57,9 @@
 		EF2DCD9821E0DA9000502848 /* ConnectVPN.scpt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ConnectVPN.scpt; sourceTree = "<group>"; };
 		EF2DCD9E21E0F06E00502848 /* ScriptGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScriptGenerator.swift; sourceTree = "<group>"; };
 		EF2DCDA021E0F5B200502848 /* Shell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shell.swift; sourceTree = "<group>"; };
+		EF2DCDA221E104FD00502848 /* Preferences.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
+		EF2DCDA421E1057E00502848 /* PreferencesWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesWindow.swift; sourceTree = "<group>"; };
+		EF2DCDA621E1059B00502848 /* PreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +87,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		EF19EC8521E3170200D0CD40 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				EF19EC8621E3171C00D0CD40 /* VPN.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
 		EF2DCD5D21E07A8500502848 = {
 			isa = PBXGroup;
 			children = (
@@ -104,16 +118,19 @@
 		EF2DCD6821E07A8500502848 /* GoVPN */ = {
 			isa = PBXGroup;
 			children = (
+				EF19EC8521E3170200D0CD40 /* Models */,
 				EF2DCD9B21E0DE4800502848 /* Resources */,
 				EF2DCD6921E07A8500502848 /* AppDelegate.swift */,
 				EF2DCD9621E0BCD100502848 /* VPNConfigParser.swift */,
 				EF2DCD9E21E0F06E00502848 /* ScriptGenerator.swift */,
 				EF2DCDA021E0F5B200502848 /* Shell.swift */,
-				EF2DCD6B21E07A8500502848 /* ViewController.swift */,
 				EF2DCD6D21E07A8600502848 /* Assets.xcassets */,
 				EF2DCD6F21E07A8600502848 /* Main.storyboard */,
 				EF2DCD7221E07A8600502848 /* Info.plist */,
 				EF2DCD7321E07A8600502848 /* GoVPN.entitlements */,
+				EF2DCDA221E104FD00502848 /* Preferences.storyboard */,
+				EF2DCDA421E1057E00502848 /* PreferencesWindow.swift */,
+				EF2DCDA621E1059B00502848 /* PreferencesViewController.swift */,
 			);
 			path = GoVPN;
 			sourceTree = "<group>";
@@ -256,6 +273,7 @@
 				EF2DCD9A21E0DB1F00502848 /* ConnectVPN.scpt in Resources */,
 				EF2DCD6E21E07A8600502848 /* Assets.xcassets in Resources */,
 				EF2DCD7121E07A8600502848 /* Main.storyboard in Resources */,
+				EF2DCDA321E104FD00502848 /* Preferences.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,10 +298,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF19EC8721E3171C00D0CD40 /* VPN.swift in Sources */,
 				EF2DCD9F21E0F06E00502848 /* ScriptGenerator.swift in Sources */,
 				EF2DCD9721E0BCD100502848 /* VPNConfigParser.swift in Sources */,
 				EF2DCDA121E0F5B200502848 /* Shell.swift in Sources */,
-				EF2DCD6C21E07A8500502848 /* ViewController.swift in Sources */,
+				EF2DCDA521E1057E00502848 /* PreferencesWindow.swift in Sources */,
+				EF2DCDA721E1059B00502848 /* PreferencesViewController.swift in Sources */,
 				EF2DCD6A21E07A8500502848 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

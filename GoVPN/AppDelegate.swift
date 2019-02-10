@@ -12,36 +12,55 @@ import Cocoa
 class AppDelegate: NSObject, NSApplicationDelegate {
 
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
-    var config: Config = Config()
+    var vpns: [VPN] = []
+    var preferencesWindow: PreferencesWindow?
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         if let button = statusItem.button {
             button.image = NSImage(named:NSImage.Name("StatusBarButtonImage"))
         }
         
-        if let newConfig = VPNConfigParser.load(filePath: "/Users/col/.gojek.mobileconfig") {
-            self.config = newConfig
+        loadVPNConfig()
+    }
+    
+    @objc func showPreferences(_ sender: Any?) {
+        if preferencesWindow == nil {
+            preferencesWindow = NSStoryboard.init(name: NSStoryboard.Name("Preferences"), bundle: nil).instantiateInitialController() as? PreferencesWindow
         }
         
-        constructMenu()
+        if let window = preferencesWindow {
+            window.showWindow(sender)
+        }
     }
     
     @objc func selectVPN(_ sender: Any?) {
         if let menuItem = sender as? NSMenuItem {
-            let payload = config.payloadContent[Int(menuItem.keyEquivalent)!-1]
-            print("Selected \(payload.userDefinedName)")
-            
-            let otp = Shell.execute(launchPath: "/usr/local/bin/mimier", arguments: ["get", "gojek"])
-            let script = ScriptGenerator.generateScript(name: "ConnectVPN", variables: ["$vpn_otp": otp, "$osx_vpn_name": "\(payload.userDefinedName), Not Connected"])
-            
-            if let script = NSAppleScript(source: script) {
-                var error: NSDictionary?
-                let output: NSAppleEventDescriptor = script.executeAndReturnError(&error)
-                if let error = error {
-                    print("error: \(error)")
-                } else {
-                    print(output.stringValue ?? "unknown")
-                }
+            let vpn = vpns[Int(menuItem.keyEquivalent)!-1]
+            connectToVPN(vpnName: vpn.name)
+        }
+    }
+    
+    func connectToVPN(vpnName: String) {
+        print("connectToVPN \(vpnName)")
+        
+        let otp = Shell.execute(launchPath: "/usr/local/bin/mimier", arguments: ["get", "gojek"])
+        let script = ScriptGenerator.generateScript(name: "ConnectVPN", variables: ["$vpn_otp": otp, "$osx_vpn_name": "\(vpnName), Not Connected"])
+        
+        if let script = NSAppleScript(source: script) {
+            var error: NSDictionary?
+            let output: NSAppleEventDescriptor = script.executeAndReturnError(&error)
+            if let error = error {
+                print("error: \(error)")
+            } else {
+                print(output.stringValue ?? "unknown")
+            }
+        }
+    }
+    
+    @objc func connectAll(_ sender: Any?) {
+        for vpn in vpns {
+            if vpn.enabled {
+                connectToVPN(vpnName: vpn.name)
             }
         }
     }
@@ -50,27 +69,43 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Insert code here to tear down your application
     }
 
+    func loadVPNConfig() {
+        if let filePath = UserDefaults.standard.string(forKey: "ConfigFilePath"), let vpns = VPNConfigParser.load(filePath: filePath) {
+            self.vpns = vpns
+            for vpn in vpns {
+                vpn.enabled = UserDefaults.standard.bool(forKey: vpn.name)
+            }
+        }
+        
+        constructMenu()
+    }
+    
     func constructMenu() {
         let menu = NSMenu()
         
-        if config.payloadContent.count > 0 {
+        if vpns.count > 0 {
             var count = 0
-            for payload in config.payloadContent {
-                count += 1
-                menu.addItem(
-                    NSMenuItem(
-                        title: payload.userDefinedName.trimmingCharacters(in: .whitespacesAndNewlines),
-                        action: #selector(AppDelegate.selectVPN(_:)),
-                        keyEquivalent: "\(count)"
+            for vpn in vpns {
+                if vpn.enabled {
+                    count += 1
+                    menu.addItem(
+                        NSMenuItem(
+                            title: vpn.name,
+                            action: #selector(AppDelegate.selectVPN(_:)),
+                            keyEquivalent: "\(count)"
+                        )
                     )
-                )
+                }
             }
         } else {
             menu.addItem(NSMenuItem(title: "Invalid config", action: nil, keyEquivalent: ""))
         }
         
-//        menu.addItem(NSMenuItem.separator())
-//        menu.addItem(NSMenuItem(title: "Preferences...", action: #selector(NSApplication.terminate(_:)), keyEquivalent: ","))
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: "Connect all", action: #selector(AppDelegate.connectAll(_:)), keyEquivalent: "A"))
+        
+        menu.addItem(NSMenuItem.separator())
+        menu.addItem(NSMenuItem(title: "Preferences...", action: #selector(AppDelegate.showPreferences(_:)), keyEquivalent: ","))
         
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit GoVPN", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
