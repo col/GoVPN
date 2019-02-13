@@ -6,5 +6,7 @@ Small menu item app to connect to multiple VPNs using OTP passwords
 - VPN config file (.mobileconfig)
 
 ## Installation
-- TODO: ...
-
+- Install Mimier: `https://github.com/gowtham-sai/mimier`
+- Setup OPT secret token: `mimier add gojek secrettoken`
+- Download and install VPN Config (.mobileconfig)
+- Download and install GoVPN [here](https://github.com/col/GoVPN/releases)
