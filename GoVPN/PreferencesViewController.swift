@@ -57,7 +57,8 @@ class PreferencesViewController: NSViewController {
     
     @IBAction func save(_ sender: Any) {
         for vpn in availableVPNsAC!.arrangedObjects as! [VPN] {
-            UserDefaults.standard.set(vpn.enabled, forKey: vpn.name)
+            let encodedData = try! JSONEncoder().encode(vpn)
+            UserDefaults.standard.set(encodedData, forKey: vpn.name)
         }
         reloadVPNConfig()
         self.view.window?.windowController?.close()

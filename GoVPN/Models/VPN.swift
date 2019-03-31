@@ -10,12 +10,14 @@
 import Foundation
 
 @objc
-class VPN: NSObject {
+class VPN: NSObject, Codable {
     @objc var name: String
     @objc var enabled: Bool
+    @objc var group: String?
     
-    init(name: String, enabled: Bool) {
+    init(name: String, enabled: Bool, group: String? = nil) {
         self.name = name
         self.enabled = enabled
+        self.group = group
     }
 }

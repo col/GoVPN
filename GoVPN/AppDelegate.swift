@@ -40,6 +40,15 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
     
+    @objc func selectVPNGroup(_ sender: Any?) {
+        if let menuItem = sender as? NSMenuItem {
+            let vpnGroups = Dictionary(grouping: self.vpns, by: { $0.group })
+            if let groupsVpns = vpnGroups[menuItem.title] {
+                connectTo(groupsVpns)
+            }
+        }
+    }
+    
     func connectToVPN(vpnName: String) {
         print("connectToVPN \(vpnName)")
         
@@ -58,6 +67,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     @objc func connectAll(_ sender: Any?) {
+        connectTo(vpns)
+    }
+    
+    func connectTo(_ vpns: [VPN]) {
         for vpn in vpns {
             if vpn.enabled {
                 connectToVPN(vpnName: vpn.name)
@@ -70,10 +83,16 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     func loadVPNConfig() {
-        if let filePath = UserDefaults.standard.string(forKey: "ConfigFilePath"), let vpns = VPNConfigParser.load(filePath: filePath) {
-            self.vpns = vpns
-            for vpn in vpns {
-                vpn.enabled = UserDefaults.standard.bool(forKey: vpn.name)
+        if let filePath = UserDefaults.standard.string(forKey: "ConfigFilePath"), let vpnConfigs = VPNConfigParser.load(filePath: filePath) {
+            self.vpns = []
+            for vpnConfig in vpnConfigs {
+                var vpn: VPN
+                if let encodedData = UserDefaults.standard.data(forKey: vpnConfig.name) {
+                    vpn = try! JSONDecoder().decode(VPN.self, from: encodedData)
+                } else {
+                    vpn = vpnConfig
+                }
+                self.vpns.append(vpn)
             }
         }
         
@@ -83,18 +102,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func constructMenu() {
         let menu = NSMenu()
         
+        let vpnGroups = Dictionary(grouping: self.vpns, by: { $0.group })
+        
         if vpns.count > 0 {
             var count = 0
-            for vpn in vpns {
-                if vpn.enabled {
-                    count += 1
-                    menu.addItem(
-                        NSMenuItem(
-                            title: vpn.name,
-                            action: #selector(AppDelegate.selectVPN(_:)),
-                            keyEquivalent: "\(count)"
-                        )
+            for (groupName, groupVpns) in vpnGroups {
+                if groupVpns.filter({ $0.enabled }).count > 0 {
+                    let name = groupName ?? "Unknown"
+                    let vpnGroupMenuItem = NSMenuItem(
+                        title: name,
+                        action: #selector(AppDelegate.selectVPNGroup(_:)),
+                        keyEquivalent: "\(name.prefix(1))"
                     )
+//                    vpnGroupMenuItem.submenu = NSMenu()
+                    menu.addItem(vpnGroupMenuItem)
+                    
+                    for vpn in groupVpns {
+                        if vpn.enabled {
+                            count += 1
+                            let menuItem = NSMenuItem(
+                                title: "    \(vpn.name)",
+                                action: #selector(AppDelegate.selectVPN(_:)),
+                                keyEquivalent: "\(count)"
+                            )
+//                            vpnGroupMenuItem.submenu?.addItem(menuItem)
+                            menu.addItem(menuItem)
+                        }
+                    }
+                    menu.addItem(NSMenuItem.separator())
                 }
             }
         } else {
