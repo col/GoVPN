@@ -35,8 +35,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc func selectVPN(_ sender: Any?) {
         if let menuItem = sender as? NSMenuItem {
-            let vpn = vpns[Int(menuItem.keyEquivalent)!-1]
-            connectToVPN(vpnName: vpn.name)
+            connectToVPN(vpnName: menuItem.title)
         }
     }
     
@@ -114,18 +113,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                         action: #selector(AppDelegate.selectVPNGroup(_:)),
                         keyEquivalent: "\(name.prefix(1))"
                     )
-//                    vpnGroupMenuItem.submenu = NSMenu()
                     menu.addItem(vpnGroupMenuItem)
                     
                     for vpn in groupVpns {
                         if vpn.enabled {
                             count += 1
                             let menuItem = NSMenuItem(
-                                title: "    \(vpn.name)",
+                                title: vpn.name,
                                 action: #selector(AppDelegate.selectVPN(_:)),
                                 keyEquivalent: "\(count)"
                             )
-//                            vpnGroupMenuItem.submenu?.addItem(menuItem)
+                            menuItem.indentationLevel = 1
                             menu.addItem(menuItem)
                         }
                     }
