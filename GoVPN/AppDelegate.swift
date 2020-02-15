@@ -9,7 +9,7 @@
 import Cocoa
 
 @NSApplicationMain
-class AppDelegate: NSObject, NSApplicationDelegate {
+class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
 
     let statusItem = NSStatusBar.system.statusItem(withLength:NSStatusItem.squareLength)
     var vpns: [VPN] = []
@@ -20,6 +20,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             button.image = NSImage(named:NSImage.Name("StatusBarButtonImage"))
         }
         
+        VPNServicesManager.shared.loadConfigurationsWithHandler { error in
+            print("VPN Services Loaded.")
+        }
         loadVPNConfig()
     }
     
@@ -35,7 +38,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     @objc func selectVPN(_ sender: Any?) {
         if let menuItem = sender as? NSMenuItem {
-            connectToVPN(vpnName: menuItem.title)
+            if let vpn = menuItem.representedObject as? VPN {
+                connectToVPN(vpnName: vpn.name)
+            }
         }
     }
     
@@ -102,10 +107,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         
         let vpnGroups = Dictionary(grouping: self.vpns, by: { $0.group })
+        let groupNames = vpnGroups.keys.sorted(by: { $0! < $1! })
         
         if vpns.count > 0 {
             var count = 0
-            for (groupName, groupVpns) in vpnGroups {
+            for groupName in groupNames {
+                let groupVpns = vpnGroups[groupName]!
                 if groupVpns.filter({ $0.enabled }).count > 0 {
                     let name = groupName ?? "Unknown"
                     let vpnGroupMenuItem = NSMenuItem(
@@ -118,13 +125,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                     for vpn in groupVpns {
                         if vpn.enabled {
                             count += 1
-                            let menuItem = NSMenuItem(
-                                title: vpn.name,
-                                action: #selector(AppDelegate.selectVPN(_:)),
-                                keyEquivalent: "\(count)"
-                            )
-                            menuItem.indentationLevel = 1
-                            menu.addItem(menuItem)
+                            menu.addItem(menuItem(for: vpn, number: count))
                         }
                     }
                     menu.addItem(NSMenuItem.separator())
@@ -143,8 +144,31 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         menu.addItem(NSMenuItem.separator())
         menu.addItem(NSMenuItem(title: "Quit GoVPN", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q"))
         
+        menu.delegate = self
         statusItem.menu = menu
     }
  
+    func menuItem(for vpn: VPN, number: Int) -> NSMenuItem {
+        let menuItem = NSMenuItem(
+            title: vpn.name,
+            action: #selector(AppDelegate.selectVPN(_:)),
+            keyEquivalent: "\(number)"
+        )
+        menuItem.indentationLevel = 1
+        menuItem.representedObject = vpn
+        if let vpnService = VPNServicesManager.shared.service(named: vpn.name),
+            vpnService.state() == .connected || vpnService.state() == .connecting
+        {
+            menuItem.state = .on
+        } else {
+            menuItem.state = .off
+        }
+        return menuItem
+    }
+    
+    func menuWillOpen(_ menu: NSMenu) {
+        print("menuWillOpen")
+        constructMenu()
+    }
 }
 
