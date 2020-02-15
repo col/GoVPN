@@ -19,10 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         if let button = statusItem.button {
             button.image = NSImage(named:NSImage.Name("StatusBarButtonImage"))
         }
-        
-        VPNServicesManager.shared.loadConfigurationsWithHandler { error in
-            print("VPN Services Loaded.")
-        }
+                
         loadVPNConfig()
     }
     
@@ -104,7 +101,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             }
         }
         
-        constructMenu()
+        VPNServicesManager.shared.loadConfigurationsWithHandler { error in
+            if let error = error {
+                print("Error loading VPNServices. Error: \(error.localizedDescription)")
+            }
+            self.constructMenu()
+        }
     }
     
     func constructMenu() {
@@ -172,7 +174,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     
     func menuWillOpen(_ menu: NSMenu) {
         print("menuWillOpen")
-        constructMenu()
+        for menuItem in statusItem.menu?.items ?? [] {
+            if let vpn = menuItem.representedObject as? VPN {
+                if let vpnService = VPNServicesManager.shared.service(named: vpn.name),
+                    vpnService.state() == .connected || vpnService.state() == .connecting
+                {
+                    menuItem.state = .on
+                } else {
+                    menuItem.state = .off
+                }
+            }
+        }
     }
 }
 
