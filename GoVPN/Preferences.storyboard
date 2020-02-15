@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="379-GU-2Up">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="379-GU-2Up">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14490.70"/>
+        <deployment identifier="macosx"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--Preferences-->
         <scene sceneID="pi0-bd-Yoo">
             <objects>
-                <windowController id="379-GU-2Up" userLabel="Preferences" customClass="PreferencesWindow" customModule="GoVPN" customModuleProvider="target" sceneMemberID="viewController">
+                <windowController showSeguePresentationStyle="single" id="379-GU-2Up" userLabel="Preferences" customClass="PreferencesWindow" customModule="GoVPN" customModuleProvider="target" sceneMemberID="viewController">
                     <window key="window" title="Preferences" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="nRf-ZO-fTn">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
@@ -35,7 +36,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
                             <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="eht-1d-hV5">
-                                <rect key="frame" x="18" y="229" width="184" height="17"/>
+                                <rect key="frame" x="18" y="230" width="184" height="17"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="180" id="Toe-sc-L5Y"/>
                                     <constraint firstAttribute="height" constant="17" id="cPO-6k-qCo"/>
@@ -47,21 +48,21 @@
                                 </textFieldCell>
                             </textField>
                             <scrollView autohidesScrollers="YES" horizontalLineScroll="19" horizontalPageScroll="10" verticalLineScroll="19" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ogR-VO-qax">
-                                <rect key="frame" x="20" y="61" width="440" height="160"/>
+                                <rect key="frame" x="20" y="61" width="440" height="161"/>
                                 <clipView key="contentView" id="3cF-rg-q1Z">
-                                    <rect key="frame" x="1" y="0.0" width="438" height="159"/>
+                                    <rect key="frame" x="1" y="0.0" width="438" height="160"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <tableView verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" columnReordering="NO" columnSelection="YES" columnResizing="NO" multipleSelection="NO" autosaveColumns="NO" headerView="owK-tf-Q9r" id="Z9h-HB-iB8">
-                                            <rect key="frame" x="0.0" y="0.0" width="505" height="134"/>
-                                            <autoresizingMask key="autoresizingMask"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="505" height="135"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <size key="intercellSpacing" width="3" height="2"/>
                                             <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
                                             <color key="gridColor" name="gridColor" catalog="System" colorSpace="catalog"/>
                                             <tableColumns>
                                                 <tableColumn width="127" minWidth="40" maxWidth="1000" id="8Qt-AP-rg1">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" title="VPN">
-                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <font key="font" metaFont="toolTip"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" name="headerColor" catalog="System" colorSpace="catalog"/>
                                                     </tableHeaderCell>
@@ -77,7 +78,7 @@
                                                 </tableColumn>
                                                 <tableColumn width="103" minWidth="10" maxWidth="3.4028234663852886e+38" id="Xm2-tx-54J">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Enabled">
-                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <font key="font" metaFont="toolTip"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </tableHeaderCell>
@@ -92,7 +93,7 @@
                                                 </tableColumn>
                                                 <tableColumn width="266" minWidth="10" maxWidth="3.4028234663852886e+38" id="c6m-2P-GHP">
                                                     <tableHeaderCell key="headerCell" lineBreakMode="truncatingTail" borderStyle="border" alignment="left" title="Group">
-                                                        <font key="font" metaFont="smallSystem"/>
+                                                        <font key="font" metaFont="toolTip"/>
                                                         <color key="textColor" name="headerTextColor" catalog="System" colorSpace="catalog"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </tableHeaderCell>
@@ -159,7 +160,7 @@
                                 </textFieldCell>
                             </textField>
                             <textField verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="ctS-oU-L9n">
-                                <rect key="frame" x="20" y="254" width="357" height="22"/>
+                                <rect key="frame" x="20" y="255" width="357" height="21"/>
                                 <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" borderStyle="bezel" drawsBackground="YES" id="eTM-JD-yA8">
                                     <font key="font" metaFont="system"/>
                                     <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>

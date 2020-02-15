@@ -13,6 +13,7 @@ class PreferencesWindow: NSWindowController {
     override func windowDidLoad() {
         super.windowDidLoad()
         
+        NSApp.activate(ignoringOtherApps: true)
         self.window?.makeKeyAndOrderFront(self)
     }
 

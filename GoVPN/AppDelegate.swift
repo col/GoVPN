@@ -31,8 +31,12 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             preferencesWindow = NSStoryboard.init(name: NSStoryboard.Name("Preferences"), bundle: nil).instantiateInitialController() as? PreferencesWindow
         }
         
-        if let window = preferencesWindow {
-            window.showWindow(sender)
+        if let windowController = preferencesWindow {
+            windowController.showWindow(sender)
+            
+            // Ensure the window becomes active and appears in front
+            NSApp.activate(ignoringOtherApps: true)
+            windowController.window?.makeKeyAndOrderFront(self)
         }
     }
     
