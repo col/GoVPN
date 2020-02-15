@@ -162,13 +162,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         )
         menuItem.indentationLevel = 1
         menuItem.representedObject = vpn
-        if let vpnService = VPNServicesManager.shared.service(named: vpn.name),
-            vpnService.state() == .connected || vpnService.state() == .connecting
-        {
-            menuItem.state = .on
-        } else {
-            menuItem.state = .off
-        }
         return menuItem
     }
     
