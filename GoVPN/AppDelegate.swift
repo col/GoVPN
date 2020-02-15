@@ -40,7 +40,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     @objc func selectVPN(_ sender: Any?) {
         if let menuItem = sender as? NSMenuItem {
             if let vpn = menuItem.representedObject as? VPN {
-                connectToVPN(vpnName: vpn.name)
+                if let vpnService = VPNServicesManager.shared.service(named: vpn.name),
+                    vpnService.state() == .connected || vpnService.state() == .connecting
+                {
+                    vpnService.disconnect()
+                } else {
+                    connectToVPN(vpnName: vpn.name)
+                }
+                
             }
         }
     }
