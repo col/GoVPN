@@ -46,8 +46,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
                     vpnService.disconnect()
                 } else {
                     connectToVPN(vpnName: vpn.name)
-                }
-                
+                }                
             }
         }
     }
@@ -120,25 +119,28 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let menu = NSMenu()
         
         let vpnGroups = Dictionary(grouping: self.vpns, by: { $0.group })
-        let groupNames = vpnGroups.keys.sorted(by: { $0! < $1! })
+        let groupNames = vpnGroups.keys.sorted(by: { $0 ?? "" < $1 ?? "" })
         
         if vpns.count > 0 {
             var count = 0
             for groupName in groupNames {
                 let groupVpns = vpnGroups[groupName]!
                 if groupVpns.filter({ $0.enabled }).count > 0 {
-                    let name = groupName ?? "Unknown"
-                    let vpnGroupMenuItem = NSMenuItem(
-                        title: name,
-                        action: #selector(AppDelegate.selectVPNGroup(_:)),
-                        keyEquivalent: "\(name.prefix(1))"
-                    )
-                    menu.addItem(vpnGroupMenuItem)
+                    var indent = 0
+                    if let name = groupName {
+                        indent = 1
+                        let vpnGroupMenuItem = NSMenuItem(
+                            title: name,
+                            action: #selector(AppDelegate.selectVPNGroup(_:)),
+                            keyEquivalent: "\(name.prefix(1))"
+                        )
+                        menu.addItem(vpnGroupMenuItem)
+                    }
                     
                     for vpn in groupVpns {
                         if vpn.enabled {
                             count += 1
-                            menu.addItem(menuItem(for: vpn, number: count))
+                            menu.addItem(menuItem(for: vpn, number: count, indent: indent))
                         }
                     }
                     menu.addItem(NSMenuItem.separator())
@@ -161,13 +163,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         statusItem.menu = menu
     }
  
-    func menuItem(for vpn: VPN, number: Int) -> NSMenuItem {
+    func menuItem(for vpn: VPN, number: Int, indent: Int = 0) -> NSMenuItem {
         let menuItem = NSMenuItem(
             title: vpn.name,
             action: #selector(AppDelegate.selectVPN(_:)),
             keyEquivalent: "\(number)"
         )
-        menuItem.indentationLevel = 1
+        menuItem.indentationLevel = indent
         menuItem.representedObject = vpn
         return menuItem
     }
