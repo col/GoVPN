@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os
 
 class VPNServicesManager {
     
@@ -27,7 +28,7 @@ class VPNServicesManager {
             withCompletionQueue: self.serviceQueue,
             handler: { (configurations: [NEConfiguration]?, error: Error?) -> Void in
                 if let error = error {
-                    print("ERROR loading configurations - %@", error.localizedDescription)
+                    os_log("ERROR loading configurations - %@", type: .error, error.localizedDescription)
                     return
                 }
                 

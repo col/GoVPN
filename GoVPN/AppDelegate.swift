@@ -7,6 +7,7 @@
 //
 
 import Cocoa
+import os
 
 @NSApplicationMain
 class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
@@ -61,18 +62,50 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
     
     func connectToVPN(vpnName: String) {
-        print("connectToVPN \(vpnName)")
+        os_log("connectToVPN %s", type: .info, vpnName)
+
+        let mimierPath = "/usr/local/bin/mimier"
+        if !FileManager.default.fileExists(atPath: mimierPath) {
+            let alert = NSAlert.init()
+            alert.messageText = "mimier not found in system"
+            alert.informativeText = "Check at https://github.com/gowtham-sai/mimier"
+            alert.addButton(withTitle: "OK")
+            alert.addButton(withTitle: "Open in Browser")
+            let alertResp = alert.runModal()
+            if alertResp.rawValue == 1001 {
+                let url = URL(string: "https://github.com/gowtham-sai/mimier")!
+                NSWorkspace.shared.open(url)
+            }
+            return
+        }
+
+        let otp = Shell.execute(launchPath: mimierPath, arguments: ["get", "gojek"])
+        let otpInt = Int(otp.trimmingCharacters(in: .whitespacesAndNewlines)) ?? 0
+
         
-        let otp = Shell.execute(launchPath: "/usr/local/bin/mimier", arguments: ["get", "gojek"])
-        let script = ScriptGenerator.generateScript(name: "ConnectVPN", variables: ["$vpn_otp": otp, "$osx_vpn_name": "\(vpnName), Not Connected"])
+        if otpInt < 10000 {
+            let alert = NSAlert.init()
+            alert.messageText = "mimier not configured"
+            alert.informativeText = "command: /usr/local/bin/mimier get gojek \n\nresult \n\(otp)"
+            alert.addButton(withTitle: "OK")
+            alert.runModal()
+            return
+        }
+
+        os_log("Otp is %d", type: .info, otpInt)
+
+        let script = ScriptGenerator.generateScript(name: "ConnectVPN",
+                                                    variables: ["$vpn_otp": String(otpInt), "$osx_vpn_name": "\(vpnName), Not Connected"])
+
+        os_log("connected")
         
         if let script = NSAppleScript(source: script) {
             var error: NSDictionary?
             let output: NSAppleEventDescriptor = script.executeAndReturnError(&error)
             if let error = error {
-                print("error: \(error)")
+                os_log("error: %@", type: .error, error)
             } else {
-                print(output.stringValue ?? "unknown")
+                os_log("ouput %s", type: .info, output.stringValue ?? "unknown")
             }
         }
     }
@@ -109,7 +142,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         
         VPNServicesManager.shared.loadConfigurationsWithHandler { error in
             if let error = error {
-                print("Error loading VPNServices. Error: \(error.localizedDescription)")
+                os_log("Error loading VPNServices. Error: %@", type: .error, error.localizedDescription)
             }
             self.constructMenu()
         }
@@ -175,7 +208,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     }
     
     func menuWillOpen(_ menu: NSMenu) {
-        print("menuWillOpen")
+        os_log("menuWillOpen")
         for menuItem in statusItem.menu?.items ?? [] {
             if let vpn = menuItem.representedObject as? VPN {
                 if let vpnService = VPNServicesManager.shared.service(named: vpn.name),

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import os.log
 
 struct Config: Decodable {
     let payloadContent: [Payload]
@@ -55,11 +56,11 @@ class VPNConfigParser {
                     vpn.enabled
                 }
             } else {
-                print("VPNConfigParser - Error: Not a valid config file")
+                os_log("VPNConfigParser - Error: Not a valid config file", type: .error)
                 return nil
             }
         } catch {
-            print("VPNConfigParser - Error: \(error)")
+            os_log("VPNConfigParser - Error: %s", type: .error, error.localizedDescription)
             return nil
         }
     }
