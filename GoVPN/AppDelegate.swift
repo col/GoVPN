@@ -82,8 +82,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
         let otp = Shell.execute(launchPath: mimierPath, arguments: ["get", "gojek"])
         let otpInt = Int(otp.trimmingCharacters(in: .whitespacesAndNewlines)) ?? 0
 
-        
-        if otpInt < 10000 {
+
+        if otpInt < 100 {
             let alert = NSAlert.init()
             alert.messageText = "mimier not configured"
             alert.informativeText = "command: /usr/local/bin/mimier get gojek \n\nresult \n\(otp)"
@@ -92,10 +92,10 @@ class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
             return
         }
 
-        os_log("Otp is %d", type: .info, otpInt)
+        os_log("Otp is %d", type: .info, otp)
 
         let script = ScriptGenerator.generateScript(name: "ConnectVPN",
-                                                    variables: ["$vpn_otp": String(otpInt), "$osx_vpn_name": "\(vpnName), Not Connected"])
+                                                    variables: ["$vpn_otp": otp, "$osx_vpn_name": "\(vpnName), Not Connected"])
 
         os_log("connected")
         
