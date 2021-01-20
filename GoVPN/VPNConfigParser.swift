@@ -7,61 +7,18 @@
 //
 
 import Foundation
+import AppKit
 
-struct Config: Decodable {
-    let payloadContent: [Payload]
+class VPNConfigManager {
     
-    init() {
-        self.payloadContent = []
+    static let userDefaults = UserDefaults(suiteName: "com.colharris.GoVPN")
+    
+    static func load() -> [VPN]? {
+        return userDefaults?.array(forKey: "vpns") as? [VPN]
     }
     
-    private enum CodingKeys: String, CodingKey {
-        case payloadContent = "PayloadContent"
-    }
-}
-
-struct Payload: Decodable {
-    let userDefinedName: String
-    
-    func name() -> String {
-        return userDefinedName.trimmingCharacters(in: .whitespacesAndNewlines)
-    }
-    
-    func selected() -> Bool {
-        return true
-    }
-    
-    private enum CodingKeys: String, CodingKey {
-        case userDefinedName = "UserDefinedName"
-    }
-}
-
-class VPNConfigParser {
-    
-    static func load(filePath: String) -> [VPN]? {
-        do {
-            let content = try String(contentsOf: URL(fileURLWithPath: filePath), encoding: String.Encoding.ascii)
-            
-            if let prefixRange = content.range(of: "<!DOCTYPE"), let suffixRange = content.range(of: "</plist>") {
-                let plistContent = content[prefixRange.lowerBound..<suffixRange.upperBound]                
-                let data = plistContent.data(using: .utf8)!
-                
-                let decoder = PropertyListDecoder()
-                let config = try! decoder.decode(Config.self, from: data)
-                
-                return config.payloadContent.map { payload in
-                    VPN(name: payload.name(), enabled: payload.selected())
-                }.filter { vpn in
-                    vpn.enabled
-                }
-            } else {
-                print("VPNConfigParser - Error: Not a valid config file")
-                return nil
-            }
-        } catch {
-            print("VPNConfigParser - Error: \(error)")
-            return nil
-        }
+    static func save(vpns: [VPN]) {
+        userDefaults?.set(vpns, forKey: "vpns")
     }
     
 }

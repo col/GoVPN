@@ -18,3 +18,4 @@ class PreferencesWindow: NSWindowController {
     }
 
 }
+ 
